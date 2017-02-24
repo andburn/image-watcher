@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:ImageWatcher"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Padding="0,2" Background="Gray" BorderBrush="Black" BorderThickness="1">
+            <DockPanel Margin="4">
+                <Button Width="40" Click="Button_Click">Open</Button>
+            </DockPanel>
+        </Border>
+        <Image x:Name="imagebox"></Image>
+    </DockPanel>
 </Window>
