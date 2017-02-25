@@ -92,6 +92,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\icomoon.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
