@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Windows.Media.Imaging;
-using System.Windows.Forms;
-using System.Windows;
 using System.IO;
+using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 
 namespace ImageWatcher
 {
@@ -42,7 +42,7 @@ namespace ImageWatcher
 
 			_width = ImageBox.ActualWidth;
 			var zoom = (int)(_width / _image.Width * 100);
-			ZoomText.Text = $"{zoom}%";
+			StatusText.Text = $"{zoom}%";
 		}
 
 		private void LoadImage(string filePath)
@@ -51,6 +51,7 @@ namespace ImageWatcher
 			{
 				try
 				{
+					// create the bitmap from a memory stream to avoid file locks
 					byte[] buffer = File.ReadAllBytes(filePath);
 					var ms = new System.IO.MemoryStream(buffer);
 					var image = new BitmapImage();
@@ -59,14 +60,28 @@ namespace ImageWatcher
 					image.StreamSource = ms;
 					image.EndInit();
 					image.Freeze();
-					// update
+					// update the image and start the watcher
 					_image = image;
 					ImageBox.Source = _image;
 					UpdateStatus();
+					StartWatching(filePath);
 				}
 				catch
 				{
-					// TODO error
+					StatusText.Text = "Error Loading File";
+				}
+			}
+		}
+
+		private void ImageDrop(object sender, System.Windows.DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+			{
+				string[] files = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
+
+				if (files != null && files.Length > 0)
+				{
+					LoadImage(files[0]);
 				}
 			}
 		}
@@ -83,7 +98,6 @@ namespace ImageWatcher
 			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				LoadImage(dialog.FileName);
-				StartWatching(dialog.FileName);
 			}
 		}
 
@@ -93,12 +107,12 @@ namespace ImageWatcher
 			{
 				ImageBox.Stretch = System.Windows.Media.Stretch.Uniform;
 				FitButton.Content = "\ue98a";
-			}	
+			}
 			else
 			{
 				ImageBox.Stretch = System.Windows.Media.Stretch.None;
 				FitButton.Content = "\ue989";
-			}			
+			}
 		}
 
 		private void ImageLayoutUpdated(object sender, EventArgs e)

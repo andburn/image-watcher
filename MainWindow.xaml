@@ -18,8 +18,8 @@
                         <!-- hover state-->
                         <VisualState Name="MouseOver">
                             <Storyboard>
-                                <ColorAnimation Storyboard.TargetName="BtnBgBrush" 
-                                          Storyboard.TargetProperty="Color" 
+                                <ColorAnimation Storyboard.TargetName="BtnBgBrush"
+                                          Storyboard.TargetProperty="Color"
                                           To="#FF7D64FF" />
                             </Storyboard>
                         </VisualState>
@@ -28,13 +28,13 @@
                 </VisualStateManager.VisualStateGroups>
                 <!-- set properties on border parent element -->
                 <Border.Background>
-                    <SolidColorBrush x:Name="BtnBgBrush" Color="#3F327F"/>
+                    <SolidColorBrush x:Name="BtnBgBrush" Color="#3F327F" />
                 </Border.Background>
                 <Border.Margin>4,2</Border.Margin>
                 <Border.Width>50</Border.Width>
                 <Border.Cursor>Hand</Border.Cursor>
                 <!-- set content -->
-                <ContentPresenter                        
+                <ContentPresenter
                         TextBlock.FontFamily="{StaticResource Icomoon}"
                         TextBlock.Foreground="White"
                         TextBlock.FontSize="20"
@@ -44,19 +44,20 @@
             </Border>
         </ControlTemplate>
     </Window.Resources>
-    <DockPanel>
-        <Border DockPanel.Dock="Top" Padding="0,2" Background="#1F0C7F" BorderBrush="Black" BorderThickness="1">
+    <DockPanel Background="#FFD5D5D6" Drop="ImageDrop" AllowDrop="True">
+        <Border DockPanel.Dock="Top" Padding="0,2" Background="#1F0C7F" BorderBrush="#7D64FF" BorderThickness="0,0,0,2">
             <DockPanel Margin="4">
                 <Button Template="{StaticResource FlatButton}"
                         Click="OpenBtnClick">&#xe930;</Button>
                 <Button Template="{StaticResource FlatButton}" x:Name="FitButton" DockPanel.Dock="Right"
                         Click="FitButtonClick">&#xe98a;</Button>
-                <TextBlock Foreground="White" x:Name="ZoomText" Margin="16,0"
+                <TextBlock Foreground="White" x:Name="StatusText" Margin="16,0"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="15">100%</TextBlock>
             </DockPanel>
         </Border>
-        <Image x:Name="ImageBox" Margin="2" LayoutUpdated="ImageLayoutUpdated"/>
+        <Image x:Name="ImageBox" Margin="2"
+               LayoutUpdated="ImageLayoutUpdated" />
     </DockPanel>
 </Window>
