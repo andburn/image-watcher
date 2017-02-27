@@ -8,7 +8,6 @@ namespace ImageWatcher
 {
 	public partial class MainWindow : Window
 	{
-		private double _width;
 		private BitmapImage _image;
 		private FileSystemWatcher _watcher;
 
@@ -40,8 +39,8 @@ namespace ImageWatcher
 			if (ImageBox.Source == null)
 				return;
 
-			_width = ImageBox.ActualWidth;
-			var zoom = (int)(_width / _image.Width * 100);
+			var width = ImageBox.ActualWidth;
+			var zoom = (int)(width / _image.Width * 100);
 			StatusText.Text = $"{zoom}%";
 		}
 
@@ -103,15 +102,20 @@ namespace ImageWatcher
 
 		private void FitButtonClick(object sender, RoutedEventArgs e)
 		{
+			if (ImageBox.Source == null)
+				return;
+
 			if (ImageBox.Stretch == System.Windows.Media.Stretch.None)
 			{
 				ImageBox.Stretch = System.Windows.Media.Stretch.Uniform;
 				FitButton.Content = "\ue98a";
+				SizeToContent = SizeToContent.Manual;
 			}
 			else
 			{
 				ImageBox.Stretch = System.Windows.Media.Stretch.None;
 				FitButton.Content = "\ue989";
+				SizeToContent = SizeToContent.WidthAndHeight;
 			}
 		}
 

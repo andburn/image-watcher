@@ -58,6 +58,7 @@
             </DockPanel>
         </Border>
         <Image x:Name="ImageBox" Margin="2"
+               Stretch="Uniform"
                LayoutUpdated="ImageLayoutUpdated" />
     </DockPanel>
 </Window>
