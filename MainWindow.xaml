@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageWatcher"
         mc:Ignorable="d"
+        
         Title="Image Watcher" Height="400" Width="500">
     <Window.Resources>
         <FontFamily x:Key="Icomoon">/Resources/#icomoon</FontFamily>
