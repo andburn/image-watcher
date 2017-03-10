@@ -8,8 +8,9 @@ namespace ImageWatcher
 {
 	public partial class MainWindow : Window
 	{
-		private BitmapImage _image;
 		private FileSystemWatcher _watcher;
+
+		private string _filePath;
 
 		public MainWindow()
 		{
@@ -18,6 +19,7 @@ namespace ImageWatcher
 
 		private void StartWatching(string filePath)
 		{
+			_filePath = filePath;
 			var path = Path.GetDirectoryName(filePath);
 			var file = Path.GetFileName(filePath);
 
@@ -27,11 +29,24 @@ namespace ImageWatcher
 			{
 				this.Dispatcher.Invoke(new Action(() =>
 				{
-					LoadImage(filePath);
+					LoadImage(_filePath);
 				}));
 			};
 
 			_watcher.EnableRaisingEvents = true;
+		}
+
+		private void UpdateWatcher(string filePath)
+		{
+			if (_watcher == null)
+				StartWatching(filePath);
+
+			_filePath = filePath;
+			var path = Path.GetDirectoryName(filePath);
+			var file = Path.GetFileName(filePath);
+
+			_watcher.Path = path;
+			_watcher.Filter = file;
 		}
 
 		private void UpdateStatus()
@@ -40,8 +55,12 @@ namespace ImageWatcher
 				return;
 
 			var width = ImageBox.ActualWidth;
-			var zoom = (int)(width / _image.Width * 100);
-			StatusText.Text = $"{zoom}%";
+			var bmp = ImageBox.Source as BitmapImage;
+			if (bmp != null)
+			{
+				var zoom = (int)(width / bmp.Width * 100);
+				StatusText.Text = $"{zoom}%";
+			}
 		}
 
 		private void LoadImage(string filePath)
@@ -52,18 +71,17 @@ namespace ImageWatcher
 				{
 					// create the bitmap from a memory stream to avoid file locks
 					byte[] buffer = File.ReadAllBytes(filePath);
-					var ms = new System.IO.MemoryStream(buffer);
+					var ms = new MemoryStream(buffer);
 					var image = new BitmapImage();
 					image.BeginInit();
 					image.CacheOption = BitmapCacheOption.OnLoad;
 					image.StreamSource = ms;
 					image.EndInit();
 					image.Freeze();
-					// update the image and start the watcher
-					_image = image;
-					ImageBox.Source = _image;
+					// update the image and watcher
+					ImageBox.Source = image;
 					UpdateStatus();
-					StartWatching(filePath);
+					UpdateWatcher(filePath);
 				}
 				catch
 				{
